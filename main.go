@@ -12,9 +12,9 @@ import (
 
 func main() {
 	//var url = "http://reg3.sut.ac.th/registrar/calendar.asp?schedulegroupid=101&acadyear=2562&semester=1"
-	// var url = "https://www.amazon.com/Animal-Farm-GEORGE-ORWELL/dp/9386538288/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573527970&sr=8-1"
+	var url = "https://www.amazon.com/Animal-Farm-GEORGE-ORWELL/dp/9386538288/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573527970&sr=8-1"
 	// var url = "https://www.amazon.com/Animal-Farm-Large-George-Orwell-dp-4871872696/dp/4871872696/ref=mt_paperback?_encoding=UTF8&me=&qid=1573546394"
-	var url = "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/ref=sr_1_1?crid=10BCROLSA6WY3&keywords=harraps+book&qid=1573550166&s=books&sprefix=harra%2Cstripbooks-intl-ship%2C388&sr=1-1"
+	// var url = "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/ref=sr_1_1?crid=10BCROLSA6WY3&keywords=harraps+book&qid=1573550166&s=books&sprefix=harra%2Cstripbooks-intl-ship%2C388&sr=1-1"
 	// var url = "https://www.amazon.com/Dasd-Direct-Access-Storage-Devices/dp/0070326746/ref=sr_1_1?keywords=dasd&qid=1573554307&s=books&sr=1-1"
 	doc, err := Init(url)
 	if err == nil {
@@ -30,6 +30,10 @@ func main() {
 		book_author, err := GetBookAuthor(doc)
 		if err == nil {
 			fmt.Println(book_author)
+		}
+		price, err := GetPrice(doc)
+		if err == nil {
+			fmt.Println(price)
 		}
 	}
 
@@ -112,6 +116,18 @@ func GetBookAuthor(doc *goquery.Document) (result string, err error) {
 	})
 
 	return book_author, nil
+}
+
+func GetPrice (doc *goquery.Document) (result string, err error) {
+	var price string
+	var isFirst bool = true
+	doc.Find("span.a-color-price").Each(func (i int, s *goquery.Selection) {
+		if isFirst {
+			isFirst = false
+			price = s.Text()
+		}
+	})
+	return price, nil
 }
 
 func Init(url string) (*goquery.Document, error) {
