@@ -3,25 +3,51 @@ package main
 import (
 	//"encoding/json"
 	"fmt"
+	// "io/ioutil"
+
 	"github.com/PuerkitoBio/goquery"
+
 	//"github.com/fooku/sutRegApi/pkg/model"
 	//"github.com/labstack/echo"
-	"golang.org/x/net/html/charset"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"golang.org/x/net/html/charset"
 )
-func main()  {
+
+func main() {
 	//var data model.Datajsonn
 	//var url = "http://reg3.sut.ac.th/registrar/calendar.asp?schedulegroupid=101&acadyear=2562&semester=1"
-	var url = "https://www.90min.com/posts/6422030-psg-set-new-transfer-price-for-neymar-as-ligue-1-giants-insist-on-cash-only-deal?view_source=teams_page&view_medium=[barca]"
+	var url = "https://www.amazon.com/Animal-Farm-GEORGE-ORWELL/dp/9386538288/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573527970&sr=8-1"
 	exampleScrape(url)
 	//fmt.Print(data)
 }
 
 func exampleScrape(url string) {
 
+	client := &http.Client{}
+
+	req, err := http.NewRequest("GET", "https://www.amazon.com/Animal-Farm-GEORGE-ORWELL/dp/9386538288/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573527970&sr=8-1", nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+	// body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// fmt.Println(string(body))
 	defer timer()()
 
 	// dt  ไลด์ว่างของ dayTime
@@ -47,24 +73,24 @@ func exampleScrape(url string) {
 	}
 
 	contentType := res.Header.Get("Content-Type") // Optional, better guessing
-	utf8reader, err := charset.NewReader(res.Body, contentType)
+	utf8reader, err := charset.NewReader(resp.Body, contentType)
 	// Load the HTML document
 	doc, err := goquery.NewDocumentFromReader(utf8reader)
 	if err != nil {
 		fmt.Println("02", err)
 	}
-	fmt.Println("Doc = " , doc)
+	fmt.Println("Doc = ", doc)
 
 	checkk = 99
 	fmt.Print("Checkk = ", checkk)
 	//type aa []string
 	// Find the review items
-	doc.Find("div").Each(func(i int, s *goquery.Selection) {
+	doc.Find("div#img-canvas").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the band and title
 
-		band := s.Find("p").Text()
-	//
-		fmt.Println(i, band)
+		band, ok := s.Find("img").Attr("src")
+		
+		fmt.Println(i, band, ok)
 	})
 	//
 	//	if i == 6 {
