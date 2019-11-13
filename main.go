@@ -125,6 +125,7 @@ func GetPrice(doc *goquery.Document) (result string, err error) {
 		if isFirst {
 			isFirst = false
 			price = strings.TrimSpace(s.Text())
+			return
 		}
 	})
 	return price, nil
