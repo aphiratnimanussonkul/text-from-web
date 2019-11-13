@@ -3,50 +3,50 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strings"
 	"regexp"
+	"strings"
+
 	"github.com/PuerkitoBio/goquery"
 
 	"golang.org/x/net/html/charset"
 )
 
 func main() {
-	// var url = "https://www.amazon.com/Diary-Wimpy-Kid-Book-14-ebook/dp/B07P339X27/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=&sr="
-	// var url = "https://www.amazon.com/Last-Kids-Earth-Nightmare-King/dp/1405295112/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=&sr="
-	// var url = "https://www.amazon.com/Wrecking-Ball-Diary-Wimpy-Book/dp/1419739034/ref=zg_bsnr_books_1?_encoding=UTF8&psc=1&refRID=7E3BDMT44WFEV9PSWND6"
-	// var url = "https://www.amazon.com/Animal-Farm-GEORGE-ORWELL/dp/9386538288/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573527970&sr=8-1"
-	// var url = "https://www.amazon.com/Animal-Farm-Large-George-Orwell-dp-4871872696/dp/4871872696/ref=mt_paperback?_encoding=UTF8&me=&qid=1573546394"
-	// var url = "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/ref=sr_1_1?crid=10BCROLSA6WY3&keywords=harraps+book&qid=1573550166&s=books&sprefix=harra%2Cstripbooks-intl-ship%2C388&sr=1-1"
-	var url = "https://www.amazon.com/Dasd-Direct-Access-Storage-Devices/dp/0070326746/ref=sr_1_1?keywords=dasd&qid=1573554307&s=books&sr=1-1"
-	// var url = "https://www.amazon.com/gp/product/1558329919/ref=s9_acsd_al_bw_c_x_3_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-8&pf_rd_r=WND1J9YNKCC0099P8GVX&pf_rd_t=101&pf_rd_p=69e92e00-dd37-4469-9e77-9c4b5c15c5a4&pf_rd_i=283155"
-	// var url = "https://www.amazon.com/Wrecking-Ball-Diary-Wimpy-Book/dp/1419739034/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
-	// var url = "https://www.amazon.com/If-You-Tell-Unbreakable-Sisterhood/dp/1542005221/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
-	// var url = "https://www.amazon.com/gp/product/154608603X/ref=s9_acsd_ri_bw_c_x_5_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-11&pf_rd_r=WND1J9YNKCC0099P8GVX&pf_rd_t=101&pf_rd_p=c1be5ed5-742b-487a-82a3-0d286153a44e&pf_rd_i=283155"
-	// var url = "https://www.amazon.com/gp/product/0545791421/ref=s9_acsd_ri_bw_c_x_2_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-12&pf_rd_r=WND1J9YNKCC0099P8GVX&pf_rd_t=101&pf_rd_p=5ce6d8b8-5077-495c-9f75-aa09194de846&pf_rd_i=283155"
-	// var url = "https://www.amazon.com/Triggered-Left-Thrives-Wants-Silence/dp/154608603X/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
+	// url := "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/?language=en"
+	// url := "https://www.amazon.com/Difficult-Riddles-Smart-Kids-Families/dp/1546595902/ref=tmm_pap_swatch_0?ie=UTF8&language=en_US&qid=&sr="
+	url := "https://www.amazon.com/If-You-Tell-Unbreakable-Sisterhood/dp/1542005221/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
+	// url := "https://www.amazon.com/Born-Crime-Stories-African-Childhood/dp/0399588191/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573553672&sr=1-1"
+	// url := "https://www.amazon.com/Born-Crime-Stories-African-Childhood/dp/0399588175/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=1573553672&sr=1-1"
+	//  url := "https://www.amazon.com/Born-Crime-Stories-African-Childhood/dp/1531865046/ref=tmm_abk_swatch_0?_encoding=UTF8&qid=1573553672&sr=1-1"
+
 	doc, err := Init(url)
 	if err == nil {
-		imageUrl, err := GetUrlImgage(doc)
-		if err == nil {
-			fmt.Println(imageUrl)
-		}
-
-		bookName, err := GetBookName(doc)
-		if err == nil {
-			fmt.Println(bookName)
-		}
-		book_author, err := GetBookAuthor(doc)
-		if err == nil {
-			fmt.Println(book_author)
-		}
-		price, err := GetPrice(doc)
-		if err == nil {
-			fmt.Println(price)
-		}
 		cover, err := CheckCover(doc)
 		if err == nil {
-			fmt.Println("Is Hardcover or Paperback?: " + cover)
+			if cover == true {
+				fmt.Println("Is Hardcover or Paperback?: ", cover)
+				imageUrl, err := GetUrlImgage(doc)
+				if err == nil {
+					fmt.Println(imageUrl)
+				}
+
+				bookName, err := GetBookName(doc)
+				if err == nil {
+					fmt.Println(bookName)
+				}
+				book_author, err := GetBookAuthor(doc)
+				if err == nil {
+					fmt.Println(book_author)
+				}
+				price, err := GetPrice(doc)
+				if err == nil {
+					fmt.Println(price)
+				}
+			}else{
+				fmt.Println("False : Please select Hardcover or Paperback")
+			}
 		}
+
 	}
 
 	//fmt.Print(data)
@@ -140,7 +140,7 @@ func GetPrice(doc *goquery.Document) (result string, err error) {
 	// fmt.Println(doc.Find(".a-color-price").
 	re := regexp.MustCompile(`[$]?\d[\d,]*[\.]?[\d]*`)
 	result, err = doc.Find("div#buybox").Html()
-	if  result != "" {
+	if result != "" {
 		temp := doc.Find("div#buybox").Find("span.a-color-price").Text()
 		price = re.FindString(temp)
 	} else {
@@ -157,28 +157,27 @@ func GetPrice(doc *goquery.Document) (result string, err error) {
 	return price, nil
 }
 
-
-func CheckCover(doc *goquery.Document) (result string, err error){
+func CheckCover(doc *goquery.Document) (result bool, err error) {
 	var cover string
-	var sum string
-	doc.Find("table#productDetailsTable .bucket .content ").Each(func(i int, s *goquery.Selection){
-		s.Find("ul").Find("li").Each(func(j int, s *goquery.Selection){
-			if strings.Contains(s.Text(),"Hardcover") || strings.Contains(s.Text(),"Paperback") {
+	var sum bool
+	doc.Find("table#productDetailsTable .bucket .content ").Each(func(i int, s *goquery.Selection) {
+		s.Find("ul").Find("li").Each(func(j int, s *goquery.Selection) {
+			if strings.Contains(s.Text(), "Hardcover") || strings.Contains(s.Text(), "Paperback") {
 				cover = s.Text()
-			} 
+			}
 		})
 	})
 
-	if strings.Contains(cover,"Paperback") || strings.Contains(cover,"Hardcover"){
-		if strings.Contains(cover,"Mass Market"){
-			sum = "false"
+	if strings.Contains(cover, "Paperback") || strings.Contains(cover, "Hardcover") {
+		if strings.Contains(cover, "Mass Market") {
+			sum = false
 		} else {
-			sum = "true"
+			sum = true
 		}
 	} else {
-		sum = "false"
+		sum = false
 	}
-	return sum,nil
+	return sum, nil
 }
 
 func Init(url string) (*goquery.Document, error) {
