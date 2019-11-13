@@ -11,9 +11,12 @@ import (
 )
 
 func main() {
+	var url = "https://www.amazon.com/Diary-Wimpy-Kid-Book-14-ebook/dp/B07P339X27/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=&sr="
+	//var url = "https://www.amazon.com/Last-Kids-Earth-Nightmare-King/dp/1405295112/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=&sr="
+	//var url = "https://www.amazon.com/Wrecking-Ball-Diary-Wimpy-Book/dp/1419739034/ref=zg_bsnr_books_1?_encoding=UTF8&psc=1&refRID=7E3BDMT44WFEV9PSWND6"
 	//var url = "http://reg3.sut.ac.th/registrar/calendar.asp?schedulegroupid=101&acadyear=2562&semester=1"
 	// var url = "https://www.amazon.com/Animal-Farm-GEORGE-ORWELL/dp/9386538288/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573527970&sr=8-1"
-	var url = "https://www.amazon.com/Animal-Farm-Large-George-Orwell-dp-4871872696/dp/4871872696/ref=mt_paperback?_encoding=UTF8&me=&qid=1573546394"
+	//var url = "https://www.amazon.com/Animal-Farm-Large-George-Orwell-dp-4871872696/dp/4871872696/ref=mt_paperback?_encoding=UTF8&me=&qid=1573546394"
 	// var url = "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/ref=sr_1_1?crid=10BCROLSA6WY3&keywords=harraps+book&qid=1573550166&s=books&sprefix=harra%2Cstripbooks-intl-ship%2C388&sr=1-1"
 	// var url = "https://www.amazon.com/Dasd-Direct-Access-Storage-Devices/dp/0070326746/ref=sr_1_1?keywords=dasd&qid=1573554307&s=books&sr=1-1"
 	doc, err := Init(url)
@@ -34,6 +37,10 @@ func main() {
 		price, err := GetPrice(doc)
 		if err == nil {
 			fmt.Println(price)
+		}
+		cover, err := CheckCover(doc)
+		if err == nil {
+			fmt.Println("Is Hardcover or Paperback?: " + cover)
 		}
 	}
 
@@ -129,6 +136,30 @@ func GetPrice(doc *goquery.Document) (result string, err error) {
 		}
 	})
 	return price, nil
+}
+
+
+func CheckCover(doc *goquery.Document) (result string, err error){
+	var cover string
+	var sum string
+	doc.Find("table#productDetailsTable .bucket .content ").Each(func(i int, s *goquery.Selection){
+		s.Find("ul").Find("li").Each(func(j int, s *goquery.Selection){
+			if strings.Contains(s.Text(),"Hardcover") || strings.Contains(s.Text(),"Paperback") {
+				cover = s.Text()
+			} 
+		})
+	})
+
+	if strings.Contains(cover,"Paperback") || strings.Contains(cover,"Hardcover"){
+		if strings.Contains(cover,"Mass Market"){
+			sum = "false"
+		} else {
+			sum = "true"
+		}
+	} else {
+		sum = "false"
+	}
+	return sum,nil
 }
 
 func Init(url string) (*goquery.Document, error) {
