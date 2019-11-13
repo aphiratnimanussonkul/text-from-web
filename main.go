@@ -17,8 +17,11 @@ func main() {
 	// var url = "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/ref=sr_1_1?crid=10BCROLSA6WY3&keywords=harraps+book&qid=1573550166&s=books&sprefix=harra%2Cstripbooks-intl-ship%2C388&sr=1-1"
 	// var url = "https://www.amazon.com/Dasd-Direct-Access-Storage-Devices/dp/0070326746/ref=sr_1_1?keywords=dasd&qid=1573554307&s=books&sr=1-1"
 	// var url = "https://www.amazon.com/gp/product/1558329919/ref=s9_acsd_al_bw_c_x_3_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-8&pf_rd_r=WND1J9YNKCC0099P8GVX&pf_rd_t=101&pf_rd_p=69e92e00-dd37-4469-9e77-9c4b5c15c5a4&pf_rd_i=283155"
-	var url = "https://www.amazon.com/Wrecking-Ball-Diary-Wimpy-Book/dp/1419739034/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
+	// var url = "https://www.amazon.com/Wrecking-Ball-Diary-Wimpy-Book/dp/1419739034/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
 	// var url = "https://www.amazon.com/If-You-Tell-Unbreakable-Sisterhood/dp/1542005221/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
+	// var url = "https://www.amazon.com/gp/product/154608603X/ref=s9_acsd_ri_bw_c_x_5_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-11&pf_rd_r=WND1J9YNKCC0099P8GVX&pf_rd_t=101&pf_rd_p=c1be5ed5-742b-487a-82a3-0d286153a44e&pf_rd_i=283155"
+	// var url = "https://www.amazon.com/gp/product/0545791421/ref=s9_acsd_ri_bw_c_x_2_w?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-12&pf_rd_r=WND1J9YNKCC0099P8GVX&pf_rd_t=101&pf_rd_p=5ce6d8b8-5077-495c-9f75-aa09194de846&pf_rd_i=283155"
+	var url = "https://www.amazon.com/Triggered-Left-Thrives-Wants-Silence/dp/154608603X/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
 	doc, err := Init(url)
 	if err == nil {
 		imageUrl, err := GetUrlImgage(doc)
@@ -89,8 +92,9 @@ func GetBookAuthor(doc *goquery.Document) (result string, err error) {
 			return
 		}
 		if strings.Contains(html[0:100], "<a") {
-			if se.Find("span").Find("span").Text() != "(Introduction)" {
+			if strings.Contains(se.Find("span.contribution").Find("span").Text(), "(Author)") {
 				result = se.Find("a").Text()
+				// fmt.Println(result)
 				if book_author != "" && result != "" {
 					book_author = book_author + ", "
 				}
@@ -101,17 +105,16 @@ func GetBookAuthor(doc *goquery.Document) (result string, err error) {
 
 		} else {
 			// fmt.Println("In second Loop")
-			se.Find("span").Each(func(i int, s *goquery.Selection) {
-				if se.Find("span").Find("span").Text() != "(Introduction)" {
+			se.Find("span.a-declarative").Each(func(i int, s *goquery.Selection) {
+				if strings.Contains(se.Find("span.contribution").Find("span").Text(), "(Author)") {
 					result = s.Find("a").Text()
+					// fmt.Println(result)
 					if book_author != "" && result != "" {
 						book_author = book_author + ", "
 					}
 					// fmt.Println(i, result)
-					if i == 5 {
-						book_author = book_author + result
-						return
-					}
+					book_author = book_author + result
+					return
 				}
 			})
 		}
@@ -124,6 +127,7 @@ func GetBookAuthor(doc *goquery.Document) (result string, err error) {
 func GetPrice(doc *goquery.Document) (result string, err error) {
 	var price string
 	var isFirst bool = true
+	// fmt.Println(doc.Find(".a-color-price").
 	doc.Find("span.a-color-price").Each(func(i int, s *goquery.Selection) {
 		if isFirst {
 			isFirst = false
