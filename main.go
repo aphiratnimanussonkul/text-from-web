@@ -12,9 +12,9 @@ import (
 )
 
 func main() {
-	// url := "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/?language=en"
+	url := "https://www.amazon.com/Harraps-Slovene-Phrasebook/dp/0071546111/?language=en"
 	// url := "https://www.amazon.com/Difficult-Riddles-Smart-Kids-Families/dp/1546595902/ref=tmm_pap_swatch_0?ie=UTF8&language=en_US&qid=&sr="
-	url := "https://www.amazon.com/If-You-Tell-Unbreakable-Sisterhood/dp/1542005221/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
+	// url := "https://www.amazon.com/If-You-Tell-Unbreakable-Sisterhood/dp/1542005221/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr="
 	// url := "https://www.amazon.com/Born-Crime-Stories-African-Childhood/dp/0399588191/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1573553672&sr=1-1"
 	// url := "https://www.amazon.com/Born-Crime-Stories-African-Childhood/dp/0399588175/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=1573553672&sr=1-1"
 	//  url := "https://www.amazon.com/Born-Crime-Stories-African-Childhood/dp/1531865046/ref=tmm_abk_swatch_0?_encoding=UTF8&qid=1573553672&sr=1-1"
